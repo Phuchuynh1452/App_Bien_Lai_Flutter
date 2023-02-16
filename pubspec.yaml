@@ -36,6 +36,9 @@ dependencies:
   intl: ^0.17.0
   flutter_format_money_vietnam: ^0.0.2
   font_awesome_flutter: ^10.4.0
+  open_file: ^3.2.1
+  http: ^0.13.5
+  native_pdf_renderer: ^5.0.0+1
 
 
   # The following adds the Cupertino Icons font to your application.

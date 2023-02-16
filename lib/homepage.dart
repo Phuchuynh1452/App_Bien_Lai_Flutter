@@ -28,10 +28,7 @@ class _HomePageState extends State<HomePage> {
       updateListView();
     }
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: (){},
-        child: Text("+"),
-      ),
+
       body:  Container(
         padding: EdgeInsets.fromLTRB(20, 15, 30, 5),
         child: Column(
