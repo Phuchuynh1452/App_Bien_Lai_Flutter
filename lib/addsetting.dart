@@ -5,14 +5,16 @@ import 'package:intl/intl.dart';
 import 'package:appphathanhbienlai/models/settingModel.dart';
 class AddSetting extends StatefulWidget {
   final Setting setting;
-  AddSetting(this.setting);
+  final String apptitle;
+  AddSetting(this.setting, this.apptitle);
   @override
-  State<AddSetting> createState() => _AddSettingState(this.setting);
+  State<AddSetting> createState() => _AddSettingState(this.setting, this.apptitle);
 }
 
 class _AddSettingState extends State<AddSetting> {
   DatabaseHelper helper = DatabaseHelper();
   Setting setting;
+  String apptitle;
 
   TextEditingController urlServiceController = TextEditingController();
   TextEditingController usernameController = TextEditingController();
@@ -22,10 +24,9 @@ class _AddSettingState extends State<AddSetting> {
   TextEditingController patternController = TextEditingController();
   TextEditingController serialController = TextEditingController();
 
-  _AddSettingState(this.setting);
+  _AddSettingState(this.setting, this.apptitle);
   @override
   Widget build(BuildContext context) {
-
     urlServiceController.text = setting.urlservice;
     usernameController.text = setting.username;
     passwordController.text = setting.password;
@@ -35,9 +36,10 @@ class _AddSettingState extends State<AddSetting> {
     serialController.text = setting.serial;
 
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
-          title: Text("Cấu hình - Thêm mới"),
+          title: Text(apptitle),
           leading: IconButton(
             icon: Icon(Icons.arrow_back, color: Colors.white),
             onPressed: () => Navigator.of(context).pop(),
@@ -51,6 +53,34 @@ class _AddSettingState extends State<AddSetting> {
               child: IconButton(
                 onPressed: (){
                   debugPrint("Save button clicked");
+                  if(urlServiceController.text == null || urlServiceController.text == ""){
+                    showAlertDialog("Tạo cấu hình lỗi", "Vui lòng nhập url service");
+                    return;
+                  }
+                  if(usernameController.text == null || usernameController.text == ""){
+                    showAlertDialog("Tạo cấu hình lỗi", "Vui lòng nhập username");
+                    return;
+                  }
+                  if(passwordController.text == null || passwordController.text == ""){
+                    showAlertDialog("Tạo cấu hình lỗi", "Vui lòng nhập password");
+                    return;
+                  }
+                  if(acaccountController.text == null || acaccountController.text == ""){
+                    showAlertDialog("Tạo cấu hình lỗi", "Vui lòng nhập ac account");
+                    return;
+                  }
+                  if(acpassController.text == null || acpassController.text == ""){
+                    showAlertDialog("Tạo cấu hình lỗi", "Vui lòng nhập ac pass");
+                    return;
+                  }
+                  if(patternController.text == null || patternController.text == ""){
+                    showAlertDialog("Tạo cấu hình lỗi", "Vui lòng nhập pattern");
+                    return;
+                  }
+                  if(serialController.text == null || serialController.text == ""){
+                    showAlertDialog("Tạo cấu hình lỗi", "Vui lòng nhập serial");
+                    return;
+                  }
                   _save();
                 },
                 icon: Icon(Icons.save),
@@ -255,6 +285,31 @@ class _AddSettingState extends State<AddSetting> {
     }else{ //Failure
       _showAlterDialog('Status','Problem Saving Setting');
     }
+  }
+
+  Future<void> showAlertDialog(String title, String message) async {
+    showDialog(
+      context: context,
+      builder: (ctx) =>
+          AlertDialog(
+            title: Text("$title"),
+            content: Text("$message"),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(ctx).pop();
+                },
+                child: Container(
+                  color: Colors.black,
+                  padding: const EdgeInsets.all(14),
+                  child: const Text("OK", style: TextStyle(
+                      color: Colors.white
+                  ),),
+                ),
+              ),
+            ],
+          ),
+    );
   }
 
 

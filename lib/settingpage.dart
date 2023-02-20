@@ -2,7 +2,6 @@ import 'package:appphathanhbienlai/models/settingModel.dart';
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 import 'dart:async';
-import 'package:appphathanhbienlai/models/catagoryModel.dart';
 import 'package:appphathanhbienlai/utils/database_helper.dart';
 import 'package:appphathanhbienlai/addsetting.dart';
 class SettingPage extends StatefulWidget {
@@ -26,7 +25,7 @@ class _SettingPageState extends State<SettingPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Phát hành"),
+        title: Text("Cấu hình"),
         actions: [
           Container(
             decoration: BoxDecoration(
@@ -35,7 +34,7 @@ class _SettingPageState extends State<SettingPage> {
             ),
             child: IconButton(
               onPressed: () async {
-                navigateToDetailSetting(Setting('','','','','','',''));
+                navigateToDetailSetting(Setting('','','','','','',''), "Cấu hình - Thêm mới");
               },
               icon: Icon(Icons.add),
             ),
@@ -82,11 +81,11 @@ class _SettingPageState extends State<SettingPage> {
                       children: [
                         IconButton(onPressed: (){
                           debugPrint('ListTitle Tapped');
-                          navigateToDetailSetting(this.settingList[position]);
+                          navigateToDetailSetting(this.settingList[position], "Cấu hình - Cập nhật");
                         }, icon: Icon(Icons.edit, color: Colors.purple,)),
                         IconButton(onPressed: (){
                           debugPrint('ListTitle Tapped');
-                          _delete(context, this.settingList[position]);
+                          showAlertDialog(context, this.settingList[position]);
                         }, icon: Icon(Icons.delete , color: Colors.redAccent)),
                       ],
                     ),
@@ -105,9 +104,9 @@ class _SettingPageState extends State<SettingPage> {
 
 
 
-  void navigateToDetailSetting(Setting setting) async {
+  void navigateToDetailSetting(Setting setting, String apptitle) async {
     await Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return AddSetting(setting);
+      return AddSetting(setting, apptitle);
     }));
   }
 
@@ -130,5 +129,41 @@ class _SettingPageState extends State<SettingPage> {
         });
       });
     });
+  }
+
+  showAlertDialog(BuildContext context, Setting setting) {
+
+    // set up the buttons
+    Widget cancelButton = TextButton(
+      child: Text("Đóng"),
+      onPressed:  () {
+        Navigator.of(context).pop();
+      },
+    );
+    Widget continueButton = TextButton(
+      child: Text("Xóa"),
+      onPressed:  () {
+        _delete(context, setting);
+        Navigator.of(context).pop();
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Xóa cấu hình"),
+      content: Text("Bạn muốn xóa cấu hình đang chọn?"),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
   }
 }

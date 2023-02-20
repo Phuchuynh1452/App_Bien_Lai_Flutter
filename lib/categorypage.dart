@@ -30,7 +30,7 @@ class CategoryPageState extends State<CategoryPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Phát hành"),
+        title: Text("Danh mục"),
         actions: [
           Container(
             decoration: BoxDecoration(
@@ -39,7 +39,7 @@ class CategoryPageState extends State<CategoryPage> {
             ),
             child: IconButton(
               onPressed: () async {
-                navigateToDetail(Category('',0));
+                navigateToDetail(Category('',0), "Danh mục - Thêm mới");
               },
               icon: Icon(Icons.add),
             ),
@@ -67,11 +67,12 @@ class CategoryPageState extends State<CategoryPage> {
                     children: [
                       IconButton(onPressed: (){
                         debugPrint('ListTitle Tapped');
-                        navigateToDetail(this.categoryList[position]);
+                        navigateToDetail(this.categoryList[position], "Danh mục - Cập nhật");
                       }, icon: Icon(Icons.edit, color: Colors.purple,)),
                       IconButton(onPressed: (){
                         debugPrint('ListTitle Tapped');
-                        _delete(context, this.categoryList[position]);
+                        showAlertDialog(context, this.categoryList[position]);
+
                       }, icon: Icon(Icons.delete , color: Colors.redAccent)),
                     ],
                   ),
@@ -108,9 +109,45 @@ class CategoryPageState extends State<CategoryPage> {
     }
   }
 
-  void navigateToDetail(Category category) async {
+  void navigateToDetail(Category category, String appbartitle) async {
     await Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return AddCategory(category);
+      return AddCategory(category, appbartitle);
     }));
+  }
+
+  showAlertDialog(BuildContext context, Category category) {
+
+    // set up the buttons
+    Widget cancelButton = TextButton(
+      child: Text("Đóng"),
+      onPressed:  () {
+        Navigator.of(context).pop();
+      },
+    );
+    Widget continueButton = TextButton(
+      child: Text("Xóa"),
+      onPressed:  () {
+        _delete(context, category);
+        Navigator.of(context).pop();
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Xóa danh mục"),
+      content: Text("Bạn muốn xóa danh mục đang chọn?"),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
   }
 }

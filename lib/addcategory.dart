@@ -1,31 +1,40 @@
 import 'package:appphathanhbienlai/models/catagoryModel.dart';
 import 'package:flutter/material.dart';
 import 'package:appphathanhbienlai/utils/database_helper.dart';
+import 'package:flutter/services.dart';
 
 class AddCategory extends StatefulWidget {
   final Category category;
-  AddCategory(this.category);
+  final String appbartitle;
+  AddCategory(this.category, this.appbartitle);
   @override
-  State<AddCategory> createState() => _AddCategoryState(this.category);
+  State<AddCategory> createState() => _AddCategoryState(this.category, this.appbartitle);
 }
 
 class _AddCategoryState extends State<AddCategory> {
   DatabaseHelper helper = DatabaseHelper();
   Category category;
+  String appbartitle;
 
   TextEditingController titleController = TextEditingController();
   TextEditingController priceController = TextEditingController();
-  _AddCategoryState(this.category);
+  _AddCategoryState(this.category, this.appbartitle);
   @override
   Widget build(BuildContext context) {
 
     titleController.text = category.title;
-    priceController.text =  category.price.toString();
+    if(category.price == 0){
+      priceController.text = "";
+    }else{
+      priceController.text =  category.price.toString();
+    }
+
 
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
-            title: Text("Danh mục - Thêm mới"),
+            title: Text(appbartitle),
             leading: IconButton(
               icon: Icon(Icons.arrow_back, color: Colors.white),
               onPressed: () => Navigator.of(context).pop(),
@@ -39,6 +48,14 @@ class _AddCategoryState extends State<AddCategory> {
               child: IconButton(
                 onPressed: (){
                   debugPrint("Save button clicked");
+                  if(titleController.text == null || titleController.text == ""){
+                    showAlertDialog("Tạo danh mục lỗi", "Vui lòng nhập tên danh mục");
+                    return;
+                  }
+                  if(titleController.text == null || titleController.text == ""){
+                    showAlertDialog("Tạo danh mục lỗi", "Vui lòng nhập mệnh giá");
+                    return;
+                  }
                   _save();
                 },
                 icon: Icon(Icons.save),
@@ -73,6 +90,9 @@ class _AddCategoryState extends State<AddCategory> {
                 padding: const EdgeInsets.fromLTRB(0,0,0,30),
                 child: TextFormField(
                   controller: priceController,
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.digitsOnly
+                  ],
                   decoration: InputDecoration(
                     labelText: "Nhập mệnh giá",
                     enabledBorder: OutlineInputBorder(
@@ -143,6 +163,31 @@ class _AddCategoryState extends State<AddCategory> {
     }else{ //Failure
       _showAlterDialog('Status','Problem Saving Category');
     }
+  }
+
+  Future<void> showAlertDialog(String title, String message) async {
+    showDialog(
+      context: context,
+      builder: (ctx) =>
+          AlertDialog(
+            title: Text("$title"),
+            content: Text("$message"),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(ctx).pop();
+                },
+                child: Container(
+                  color: Colors.black,
+                  padding: const EdgeInsets.all(14),
+                  child: const Text("OK", style: TextStyle(
+                      color: Colors.white
+                  ),),
+                ),
+              ),
+            ],
+          ),
+    );
   }
 
 

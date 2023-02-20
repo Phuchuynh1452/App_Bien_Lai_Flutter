@@ -83,28 +83,4 @@ class MyStatefulWidgetState extends State<MyStatefulWidget> {
       ),
     );
   }
-
-  void navigateToDetail(Category category) async {
-    bool result = await Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return AddCategory(category);
-    }));
-
-    if( result == true){
-      setState(() {
-        _selectedIndex = 2;
-      });
-    }
-  }
-
-  void navigateToDetailSetting(Setting setting) async {
-    bool result = await Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return AddSetting(setting);
-    }));
-
-    if( result == true){
-      setState(() {
-        _selectedIndex = 1;
-      });
-    }
-  }
 }
