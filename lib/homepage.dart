@@ -1,13 +1,8 @@
 import 'dart:convert';
-import 'dart:ffi';
-
-// import 'dart:html';
-// import 'package:appphathanhbienlai/listnoidung.dart';
-import 'package:appphathanhbienlai/listnoidung.dart';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-import 'package:intl/number_symbols_data.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
@@ -51,8 +46,8 @@ class HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     if (categoryList == null || settingList == null) {
-      categoryList = List<Category>();
-      settingList = List<Setting>();
+      categoryList = <Category>[];
+      settingList = <Setting>[];
       updateListView();
       getSettingListView();
     }else {
@@ -60,40 +55,49 @@ class HomePageState extends State<HomePage> {
       getSettingListView();
     }
       return Scaffold(
-          floatingActionButton: FloatingActionButton(
-            onPressed: () async {
-              if (hoten_Controller.text == null ||
-                  hoten_Controller.text == "") {
-                showAlertDialog("Lỗi nhập liệu", "Vui lòng nhập họ và tên!");
-                return;
-              }
-              if (diachi_Controller.text == null ||
-                  diachi_Controller.text == "") {
-                showAlertDialog("Lỗi nhập liệu", "Vui lòng nhập địa chỉ!");
-                return;
-              }
-              if (radioCategory == null || radioCategory == "") {
-                showAlertDialog("Lỗi nhập liệu", "Vui lòng chọn danh mục!");
-                return;
-              }
-              if (soluong_Controller.text == null ||
-                  soluong_Controller.text == "") {
-                showAlertDialog("Lỗi nhập liệu", "Vui lòng nhập số lượng!");
-                return;
-              }
+          appBar: AppBar(
+            title: Text("Phát hành"),
+            actions: [
+              Container(
+                decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.lightBlueAccent
+                ),
+                child: IconButton(
+                  onPressed: () async {
+                    if (hoten_Controller.text == null ||
+                        hoten_Controller.text == "") {
+                      showAlertDialog("Lỗi nhập liệu", "Vui lòng nhập họ và tên!");
+                      return;
+                    }
+                    if (diachi_Controller.text == null ||
+                        diachi_Controller.text == "") {
+                      showAlertDialog("Lỗi nhập liệu", "Vui lòng nhập địa chỉ!");
+                      return;
+                    }
+                    if (radioCategory == null || radioCategory == "") {
+                      showAlertDialog("Lỗi nhập liệu", "Vui lòng chọn danh mục!");
+                      return;
+                    }
+                    if (soluong_Controller.text == null ||
+                        soluong_Controller.text == "") {
+                      showAlertDialog("Lỗi nhập liệu", "Vui lòng nhập số lượng!");
+                      return;
+                    }
 
-              String result = await fetchPhatHanhBienLai();
-              if (result.contains("OK")) {
-                showAlertDialog("Success", "Phát hành thành công!");
-                String result_bienlai_64 = await fetchBienLai(fkeyHoaDon);
-                // showAlertDialog("Success",result_bienlai_64);
-                // String bienlai64 = layKetQuaBienLai64(result_bienlai_64);
-                // createPdf(bienlai64);
-              } else {
-                showAlertDialog("Error", "Lỗi phát hành!");
-              }
-            },
-            child: Icon(Icons.add),
+                    String result = await fetchPhatHanhBienLai();
+                    if (result.contains("OK")) {
+                      String result_bienlai_64 = await fetchBienLai(fkeyHoaDon);
+                      String bienlai64 = layKetQuaBienLai64(result_bienlai_64);
+                      createPdf(bienlai64);
+                    } else {
+                      showAlertDialog("Error", "Lỗi phát hành!");
+                    }
+                  },
+                  icon: Icon(Icons.upload),
+                ),
+              )
+            ],
           ),
           body: Container(
             padding: EdgeInsets.fromLTRB(20, 15, 30, 5),
@@ -342,6 +346,7 @@ class HomePageState extends State<HomePage> {
     );
 
     if (response.statusCode == 201 || response.statusCode == 200) {
+      print(response.body);
       return layKetQuaPhatHanh(response.body);
     } else {
       showAlertDialog("Lỗi phát hành", "Có lỗi xãy ra khi phát hành biên lai");
@@ -352,36 +357,35 @@ class HomePageState extends State<HomePage> {
 
   Future<String> fetchBienLai(String fkey) async {
     final response = await http.post(
-      Uri.parse(this.settingList[0].urlservice),
+      Uri.parse('${this.settingList[1].urlservice}'),
       headers: <String, String>{
         'content-type': 'text/xml; charset=utf-8',
         'SOAPAction': 'http://tempuri.org/downloadInvPDFFkeyNoPay',
       },
       body: utf8.encode(GenerateRequestBody_BienLai(fkey)),
     );
-    showAlertDialog("Lỗi phát hành", response.statusCode.toString());
-
-    // if (response.statusCode == 201 || response.statusCode == 200) {
-    //   return response.body;
-    // } else {
-    //   showAlertDialog("Lỗi phát hành", "Có lỗi xãy ra khi phát hành biên lai");
-    //   throw Exception('Phát hành biên lai thất bại');
-    // }
+    if (response.statusCode == 201 || response.statusCode == 200) {
+      return response.body;
+    } else {
+      showAlertDialog("Lỗi phát hành", "Có lỗi xãy ra khi phát hành biên lai");
+      throw Exception('Phát hành biên lai thất bại');
+    }
   }
   //
   //
-  // createPdf(String base64String) async {
-  //   var bytes = base64Decode(base64String.replaceAll('\n', ''));
-  //   final output = await getTemporaryDirectory();
-  //   String time = DateFormat('ddMMyyyykkmmssSSS').format(DateTime.now());
-  //   // final file = File("${output.path}/bienlai_${time}.pdf");
-  //   // await file.writeAsBytes(bytes.buffer.asUint8List());
-  //   //
-  //   // print("${output.path}/bienlai_${time}.pdf");
-  //   // await OpenFile.open("${output.path}/bienlai_${time}.pdf");
-  //
-  //   setState(() {});
-  // }
+  createPdf(String base64String) async {
+    var bytes = base64Decode(base64String.replaceAll('\n', ''));
+    print(bytes);
+    final output = await getTemporaryDirectory();
+    String time = DateFormat('ddMMyyyykkmmssSSS').format(DateTime.now());
+    final file = File("${output.path}/bienlai_${time}.pdf");
+    await file.writeAsBytes(bytes.buffer.asUint8List());
+
+    print("${output.path}/bienlai_${time}.pdf");
+    await OpenFile.open("${output.path}/bienlai_${time}.pdf");
+
+    setState(() {});
+  }
   //
   int calc_ranks(ranks) {
     double multiplier = .5;
@@ -391,9 +395,8 @@ class HomePageState extends State<HomePage> {
   //
   String GenerateXml() {
     fkeyHoaDon = DateFormat('ddMMyyyykkmmssSSS').format(DateTime.now());
-    String arising_date = DateFormat('dd/MM/yyyy').format(DateTime.now());
 
-    String amountInWords = NumberToVietnamese.convert(calc_ranks(tongtien));
+    String amountInWords = NumberToVietnamese.convert(calc_ranks(tongtien * 2));
     String xml = '<Invoices>'
         '<Inv>'
         '<key>$fkeyHoaDon</key>'
@@ -438,7 +441,7 @@ class HomePageState extends State<HomePage> {
         '<tem:ImportAndPublishInv>'
         '<tem:Account>${this.settingList[0].acaccount}</tem:Account>'
         '<tem:ACpass>${this.settingList[0].acpass}</tem:ACpass>'
-        '<tem:xmlInvData><![CDATA[${gen_xml}]]></tem:xmlInvData>'
+        '<tem:xmlInvData><![CDATA[$gen_xml]]></tem:xmlInvData>'
         '<tem:username>${this.settingList[0].username}</tem:username>'
         '<tem:password>${this.settingList[0].password}</tem:password>'
         '<tem:pattern>${this.settingList[0].pattern}</tem:pattern>'
@@ -459,7 +462,7 @@ class HomePageState extends State<HomePage> {
         '<x:Header/>'
         '<x:Body>'
         '<tem:downloadInvPDFFkeyNoPay>'
-        '<tem:fkey>$fkey</tem:fkey>'
+        '<tem:fkey>${fkey}</tem:fkey>'
         '<tem:userName>${this.settingList[1].username}</tem:userName>'
         '<tem:userPass>${this.settingList[1].password}</tem:userPass>'
         '</tem:downloadInvPDFFkeyNoPay>'

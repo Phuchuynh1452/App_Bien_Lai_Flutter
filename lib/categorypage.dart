@@ -29,6 +29,23 @@ class CategoryPageState extends State<CategoryPage> {
     }
 
     return Scaffold(
+      appBar: AppBar(
+        title: Text("Phát hành"),
+        actions: [
+          Container(
+            decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.lightBlueAccent
+            ),
+            child: IconButton(
+              onPressed: () async {
+                navigateToDetail(Category('',0));
+              },
+              icon: Icon(Icons.add),
+            ),
+          )
+        ],
+      ),
       body: getCategoryListView(),
     );
   }

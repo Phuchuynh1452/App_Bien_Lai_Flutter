@@ -1,8 +1,6 @@
 import 'package:appphathanhbienlai/models/catagoryModel.dart';
 import 'package:flutter/material.dart';
-import 'dart:async';
 import 'package:appphathanhbienlai/utils/database_helper.dart';
-import 'package:intl/intl.dart';
 
 class AddCategory extends StatefulWidget {
   final Category category;
@@ -22,7 +20,7 @@ class _AddCategoryState extends State<AddCategory> {
   Widget build(BuildContext context) {
 
     titleController.text = category.title;
-    priceController.text = category.price.toString();
+    priceController.text =  category.price.toString();
 
     return MaterialApp(
       home: Scaffold(
@@ -122,6 +120,11 @@ class _AddCategoryState extends State<AddCategory> {
   //Update the description of Note Object
   void updatePrice(){
     category.price = double.parse(priceController.text);
+  }
+
+  int calc_ranks(ranks) {
+    double multiplier = .5;
+    return (multiplier * ranks).round();
   }
 
   void _save() async{

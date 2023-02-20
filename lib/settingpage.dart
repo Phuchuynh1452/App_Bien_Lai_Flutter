@@ -25,6 +25,23 @@ class _SettingPageState extends State<SettingPage> {
     }
 
     return Scaffold(
+      appBar: AppBar(
+        title: Text("Phát hành"),
+        actions: [
+          Container(
+            decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.lightBlueAccent
+            ),
+            child: IconButton(
+              onPressed: () async {
+                navigateToDetailSetting(Setting('','','','','','',''));
+              },
+              icon: Icon(Icons.add),
+            ),
+          )
+        ],
+      ),
       body: getSettingListView(),
     );
   }
