@@ -90,139 +90,142 @@ class _AddSettingState extends State<AddSetting> {
         ),
         body: Container(
           padding: EdgeInsets.fromLTRB(20, 30, 30, 20),
-          child: Column(
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0,0,0,20),
-                child: TextFormField(
-                  controller: urlServiceController,
-                  decoration: InputDecoration(
-                    labelText: "Nhâp url service",
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                          width: 2, color: Colors.grey),
+          child: SingleChildScrollView(
+            physics: BouncingScrollPhysics(),
+            child: Column(
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0,0,0,20),
+                  child: TextFormField(
+                    controller: urlServiceController,
+                    decoration: InputDecoration(
+                      labelText: "Nhâp url service",
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                            width: 2, color: Colors.grey),
+                      ),
                     ),
-                  ),
-                  onChanged: (value){
-                    debugPrint('Something changed in url Text Field');
-                    updateUrlService();
-                  },
-                  keyboardType: TextInputType.url,
+                    onChanged: (value){
+                      debugPrint('Something changed in url Text Field');
+                      updateUrlService();
+                    },
+                    keyboardType: TextInputType.url,
 
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0,0,0,20),
-                child: TextFormField(
-                  controller: usernameController,
-                  decoration: InputDecoration(
-                    labelText: "Nhập username",
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                          width: 2, color: Colors.grey),
-                    ),
                   ),
-                  onChanged: (value){
-                    debugPrint('Something changed in Price Text Field');
-                    updateUsername();
-                  },
-                  keyboardType: TextInputType.name,
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0,0,0,20),
-                child: TextFormField(
-                  obscureText: true,
-                  controller: passwordController,
-                  decoration: InputDecoration(
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0,0,0,20),
+                  child: TextFormField(
+                    controller: usernameController,
+                    decoration: InputDecoration(
+                      labelText: "Nhập username",
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                            width: 2, color: Colors.grey),
+                      ),
+                    ),
+                    onChanged: (value){
+                      debugPrint('Something changed in Price Text Field');
+                      updateUsername();
+                    },
+                    keyboardType: TextInputType.name,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0,0,0,20),
+                  child: TextFormField(
+                    obscureText: true,
+                    controller: passwordController,
+                    decoration: InputDecoration(
 
-                    labelText: "Nhập password",
+                      labelText: "Nhập password",
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                            width: 2, color: Colors.grey),
+                      ),
+                    ),
+                    onChanged: (value){
+                      debugPrint('Something changed in Price Text Field');
+                      updatePassword();
+                    },
+                    keyboardType: TextInputType.visiblePassword,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0,0,0,20),
+                  child: TextFormField(
+                    controller: acaccountController,
+                    decoration: InputDecoration(
+                      labelText: "Nhập ac acount",
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                            width: 2, color: Colors.grey),
+                      ),
+                    ),
+                    onChanged: (value){
+                      debugPrint('Something changed in Price Text Field');
+                      updateAcacount();
+                    },
+                    keyboardType: TextInputType.name,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0,0,0,20),
+                  child: TextFormField(
+                    obscureText: true,
+                    controller: acpassController,
+                    decoration: InputDecoration(
+                      labelText: "Nhập ac pass",
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                            width: 2, color: Colors.grey),
+                      ),
+                    ),
+                    onChanged: (value){
+                      debugPrint('Something changed in Price Text Field');
+                      updateAcpass();
+                    },
+                    keyboardType: TextInputType.visiblePassword,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0,0,0,20),
+                  child: TextFormField(
+                    controller: patternController,
+                    decoration: InputDecoration(
+                      labelText: "Nhập pattern",
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                            width: 2, color: Colors.grey),
+                      ),
+                    ),
+                    onChanged: (value){
+                      debugPrint('Something changed in Price Text Field');
+                      updatePattern();
+                    },
+                    keyboardType: TextInputType.name,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0,0,0,20),
+                  child: TextFormField(
+                    controller: serialController,
+                    decoration: InputDecoration(
+                      labelText: "Nhập serial",
                     enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                          width: 2, color: Colors.grey),
+                        borderSide: BorderSide(
+                            width: 2, color: Colors.grey),
+                      ),
                     ),
+                    onChanged: (value){
+                      debugPrint('Something changed in Price Text Field');
+                      updateSerial();
+                    },
+                    keyboardType: TextInputType.name,
                   ),
-                  onChanged: (value){
-                    debugPrint('Something changed in Price Text Field');
-                    updatePassword();
-                  },
-                  keyboardType: TextInputType.visiblePassword,
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0,0,0,20),
-                child: TextFormField(
-                  controller: acaccountController,
-                  decoration: InputDecoration(
-                    labelText: "Nhập ac acount",
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                          width: 2, color: Colors.grey),
-                    ),
-                  ),
-                  onChanged: (value){
-                    debugPrint('Something changed in Price Text Field');
-                    updateAcacount();
-                  },
-                  keyboardType: TextInputType.name,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0,0,0,20),
-                child: TextFormField(
-                  obscureText: true,
-                  controller: acpassController,
-                  decoration: InputDecoration(
-                    labelText: "Nhập ac pass",
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                          width: 2, color: Colors.grey),
-                    ),
-                  ),
-                  onChanged: (value){
-                    debugPrint('Something changed in Price Text Field');
-                    updateAcpass();
-                  },
-                  keyboardType: TextInputType.visiblePassword,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0,0,0,20),
-                child: TextFormField(
-                  controller: patternController,
-                  decoration: InputDecoration(
-                    labelText: "Nhập pattern",
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                          width: 2, color: Colors.grey),
-                    ),
-                  ),
-                  onChanged: (value){
-                    debugPrint('Something changed in Price Text Field');
-                    updatePattern();
-                  },
-                  keyboardType: TextInputType.name,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0,0,0,20),
-                child: TextFormField(
-                  controller: serialController,
-                  decoration: InputDecoration(
-                    labelText: "Nhập serial",
-                  enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                          width: 2, color: Colors.grey),
-                    ),
-                  ),
-                  onChanged: (value){
-                    debugPrint('Something changed in Price Text Field');
-                    updateSerial();
-                  },
-                  keyboardType: TextInputType.name,
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
